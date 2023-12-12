@@ -1,15 +1,14 @@
-async function getData() //this does not work :(
-{
-    try
-    {
-        const source = await fetch('ZonAann.Ts+dSST.csv');
-        let data = await source.json();
-        console.log(data);
-    }catch(error){
-        console.log(error);
-    }
+async function getData() {
+    const response = await fetch("test.csv");
+    const data = await response.text();
+    const rows = data.split("\n").slice(1);
+    rows.forEach((elem) => {
+              const row = elem.split(",");
+              const year = row[0];
+              const temp = row[1];
+              console.log(year, temp);
+            });
+    console.log(rows);
 }
-
-console.log("hello");
 
 getData();

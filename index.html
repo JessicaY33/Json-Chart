@@ -4,10 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <!-- ref chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <link rel = "sytlesheet" type = "text/css" href="style.css">
 <script src = "script.js"></script>
 <body>
-    
+    <canvas
+    id = "chart"></canvas>
+    <script>
+        var chart = new Chart('chart', {
+    type: 'horizontalBar',
+    data: {
+      labels: ['A', 'B', 'C'],
+      datasets: [
+        {
+          data: [10, 20, 30]
+        }
+      ]
+    }
+  });
+    </script>
 </body>
 </html>
