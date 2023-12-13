@@ -4,26 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <!-- ref chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<link rel = "sytlesheet" type = "text/css" href="style.css">
-<script src = "script.js"></script>
 <body>
-    <canvas
-    id = "chart"></canvas>
+    <canvas id = "chart"></canvas>
+    
     <script>
-        var chart = new Chart('chart', {
-    type: 'horizontalBar',
-    data: {
-      labels: ['A', 'B', 'C'],
-      datasets: [
+        const xlabels = [];
+        const ytemps = [];
+
+        makeChart();
+
+        async function getData()
         {
-          data: [10, 20, 30]
+            const source = await fetch('ZonAnn.Ts+dSST.csv'); //gets data
+            const data  = await source.text(); //converts data to text
+            console.log(data); //places the data which is an array into the console *Only shown in live servers for some reason*
+            const rows = data.split("\n").slice(1); //Ignores the first element in the array (removes the element labels)
+            //Makes rows that only show two variables from the array
+            rows.forEach((elem) => {
+                const row = elem.split(","); //°C
+                const year = row[0];
+                xlabels.push(year);
+                const temp = parseFloat(row[1]) + 14;
+                ytemps.push(temp);
+                console.log(year, temp);
+            });
         }
-      ]
-    }
-  });
+        
+        async function makeChart()
+        {
+            await getData();
+            const ctx = document.getElementById('chart'); //Selects tag
+        
+            //Chart   
+            const chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: xlabels,
+                    datasets: [{
+                        label: 'Global Average Annual Temperature (1880 - 2018)',
+                        data: ytemps,
+                        borderColor: 'rgb(247, 96, 96)', //line color
+                        borderWidth: 1.5,
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: { //y-axis number range
+                            beginAtZero: false,
+                            suggestedMin: 13,
+                            suggestedMax: 15.5
+                        }
+                    }
+                }
+            });
+        }
     </script>
 </body>
 </html>
